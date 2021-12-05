@@ -1,6 +1,6 @@
 const express = require('express');
 const ruta = express.Router();
-
+const { body, validationResult } = require('express-validator');
 const mysqlConnection = require('../database')
 
 /**
@@ -139,7 +139,10 @@ ruta.get('/Seguidor/Seguido/:idUsuario', (req, res) =>{
  *        description: Error con el servidor
  *
  */
-ruta.post('/Seguidor', (req, res) =>{
+ruta.post('/Seguidor',[
+    body("idUsuario", "Ingrese el id del usuario a seguir").exists(),
+    body("idSeguidor", "Ingrese el id del usuario que sigue").exists()
+], (req, res) =>{
     const {idUsuario, idSeguidor} = req.body
     mysqlConnection.query('CALL C_Seguidor(?, ?)', [idUsuario, idSeguidor], (err, rows, fields) =>{
         if(!err){
@@ -168,7 +171,10 @@ ruta.post('/Seguidor', (req, res) =>{
  *      404:
  *        description: este follow no existe
  */
-ruta.delete('/Seguidor', (req, res) =>{
+ruta.delete('/Seguidor',[
+    body("idUsuario", "Ingrese el id del usuario que se esta siguiendo").exists(),
+    body("idSeguidor", "Ingrese el id del usuario que sigue y quiere quitar el follow").exists()
+], (req, res) =>{
     const {idUsuario, idSeguidor} = req.body
     mysqlConnection.query('CALL D_Unfollow(?, ?)', [idUsuario, idSeguidor], (err, rows, fields) =>{
         if(!err){

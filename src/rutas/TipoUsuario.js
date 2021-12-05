@@ -1,6 +1,6 @@
 const express = require('express');
 const ruta = express.Router();
-
+const { body, validationResult } = require('express-validator')
 const mysqlConnection = require('../database')
 
 /**
@@ -81,7 +81,9 @@ ruta.get('/TipoUsuario', (req, res) => {
  *
  */
 
-ruta.post('/TipoUsuario', (req, res) =>{
+ruta.post('/TipoUsuario',[
+    body("TipoUsuario", "Ingrese el rol del usuario como TipoUsuario").exists()
+], (req, res) =>{
     const {TipoUsuario} = req.body;
     mysqlConnection.query('CALL CU_TipoUsuario(?, ?)', [0, TipoUsuario], (err, rows, fields) =>{
         if(!err){
@@ -112,7 +114,9 @@ ruta.post('/TipoUsuario', (req, res) =>{
  *      404:
  *        description: TipoUsuario no encontrado
  */
-ruta.put('/TipoUsuario/:idTipoUsuario', (req, res) =>{
+ruta.put('/TipoUsuario/:idTipoUsuario',[
+    body("TipoUsuario", "Ingrese el rol del usuario como TipoUsuario").exists()
+], (req, res) =>{
     const {TipoUsuario} = req.body;
     const {idTipoUsuario} = req.params;
     mysqlConnection.query('CALL CU_TipoUsuario(?, ?)', [idTipoUsuario, TipoUsuario], (err, rows, fields) =>{

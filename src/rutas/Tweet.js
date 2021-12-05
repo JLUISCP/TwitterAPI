@@ -1,6 +1,6 @@
 const express = require('express');
 const ruta = express.Router();
-
+const { body, validationResult } = require('express-validator')
 const mysqlConnection = require('../database')
 
 /**
@@ -127,7 +127,11 @@ ruta.get('/Tweet/:idUsuario', (req, res) => {
  *        description: Error con el servidor
  *
  */
-ruta.post('/Tweet', (req, res) =>{
+ruta.post('/Tweet',[
+    body("Cuerpo", "Ingrese el contenido del Tweet").exists(),
+    body("FechaHoraPublicacion", "Ingrese la fecha de publicacion del Tweet").exists(),
+    body("idUsuario", "Ingrese el id del Usuario que publica este Tweet").exists()
+], (req, res) =>{
     const {Cuerpo, FechaHoraPublicacion, idUsuario} = req.body
     mysqlConnection.query('CALL CU_Tweet(?, ?, ?, ?)', [0, Cuerpo, FechaHoraPublicacion, idUsuario], (err, rows, fields) =>{
         if(!err){
@@ -158,7 +162,11 @@ ruta.post('/Tweet', (req, res) =>{
  *      404:
  *        description: Tweet no encontrado
  */
-ruta.put('/Tweet/:idTweet', (req, res) =>{
+ruta.put('/Tweet/:idTweet',[
+    body("Cuerpo", "Ingrese el contenido del Tweet").exists(),
+    body("FechaHoraPublicacion", "Ingrese la fecha de publicacion del Tweet").exists(),
+    body("idUsuario", "Ingrese el id del Usuario que publica este Tweet").exists()
+], (req, res) =>{
     const {idTweet} = req.params
     const {Cuerpo, FechaHoraPublicacion, idUsuario} = req.body
     mysqlConnection.query('CALL CU_Tweet(?, ?, ?, ?)', [idTweet, Cuerpo, FechaHoraPublicacion, idUsuario], (err, rows, fields) =>{

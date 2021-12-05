@@ -1,6 +1,6 @@
 const express = require('express');
 const ruta = express.Router();
-
+const { body, validationResult } = require('express-validator')
 const mysqlConnection = require('../database')
 
 /**
@@ -108,7 +108,11 @@ ruta.get('/Usuario', (req, res) => {
  *        description: Error con el servidor
  *
  */
-ruta.post('/Usuario', (req, res) =>{
+ruta.post('/Usuario',[
+    body("Nombre", "Ingrese un nombre para el usuario").exists(),
+    body("NombreUsuario", "Ingrese el nombre de usuario para el usuario").exists(),
+    body("Contraseña", "Ingrese la contraseña par la cuenta de este usuario").exists()
+], (req, res) =>{
     const {Nombre, NombreUsuario, Contraseña} = req.body
     mysqlConnection.query('CALL CU_Usuario(?, ?, ?, ?)', [0, Nombre, NombreUsuario, Contraseña], (err, rows, fields) =>{
         if(!err){
@@ -139,7 +143,11 @@ ruta.post('/Usuario', (req, res) =>{
  *      404:
  *        description: Usuario no encontrado
  */
-ruta.put('/Usuario/:idUsuario', (req, res) =>{
+ruta.put('/Usuario/:idUsuario',[
+    body("Nombre", "Ingrese un nombre para el usuario").exists(),
+    body("NombreUsuario", "Ingrese el nombre de usuario para el usuario").exists(),
+    body("Contraseña", "Ingrese la contraseña par la cuenta de este usuario").exists()
+], (req, res) =>{
     const {idUsuario} = req.params
     const {Nombre, NombreUsuario, Password} = req.body
     mysqlConnection.query('CALL CU_Usuario(?, ?, ?, ?)', [idUsuario, Nombre, NombreUsuario, Password], (err, rows, fields) =>{

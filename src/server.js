@@ -14,7 +14,6 @@ app.use(require("./rutas/TipoUsuario.js"))
 app.use(require("./rutas/Usuario.js"))
 app.use(require("./rutas/Tweet.js"))
 app.use(require("./rutas/Seguidor.js"))
-
 //DOCUMENTACION SWAGGER
 const options = {
     swaggerDefinition: {
@@ -31,7 +30,7 @@ const options = {
         }
       ]
     },
-    apis: ["./src/rutas/*.js"]
+    apis: ["../src/rutas/*.js"]
   };
 
 const specs = swaggerJsondoc(options);
