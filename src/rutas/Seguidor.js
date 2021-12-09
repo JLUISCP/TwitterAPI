@@ -14,7 +14,7 @@ const mysqlConnection = require('../database')
  *          type: integer
  *          description: id de un Usuario
  *        idSeguidor:
- *          type: string
+ *          type: integer
  *          description: id del usuario que toma el rol de seguidor
  *      required:
  *        - idUsuario
@@ -175,13 +175,18 @@ ruta.delete('/Seguidor',[
     body("idUsuario", "Ingrese el id del usuario que se esta siguiendo").exists(),
     body("idSeguidor", "Ingrese el id del usuario que sigue y quiere quitar el follow").exists()
 ], (req, res) =>{
-    const {idUsuario, idSeguidor} = req.body
-    mysqlConnection.query('CALL D_Unfollow(?, ?)', [idUsuario, idSeguidor], (err, rows, fields) =>{
-        if(!err){
-            res.json(rows[0])
-        }else{
-            console.log(err)
-        }
-    })
+    const errors = validationResult(req)
+    if(errors.isEmpty()){
+        const {idUsuario, idSeguidor} = req.body
+        mysqlConnection.query('CALL D_Unfollow(?, ?)', [idUsuario, idSeguidor], (err, rows, fields) =>{
+            if(!err){
+                res.status(200).json(rows[0])
+            }else{
+                res.status(400).json(errors.array())
+            }
+        })
+    }else{
+
+    }
 })
 module.exports = ruta

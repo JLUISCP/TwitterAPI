@@ -1,5 +1,6 @@
 const express = require('express');
 const ruta = express.Router();
+const bcrypt = require("bcryptjs");
 const { body, validationResult } = require('express-validator')
 const mysqlConnection = require('../database')
 
@@ -85,6 +86,41 @@ ruta.get('/Usuario', (req, res) => {
             res.json(rows[0])
         }else{
             console.log(err)
+        }
+    })
+})
+
+/**
+ * @swagger
+ * /Usuario/{idUsuario}:
+ *  get:
+ *    summary: Obtiene un usuario por su ID
+ *    tags: [Usuario]
+ *    parameters:
+ *      - $ref: '#/components/parameters/idUsuario'
+ *    responses:
+ *      200:
+ *        description: Usuario eliminado
+ *        content:
+ *          application/json:
+ *            schema:
+ *              type: object
+ *              items:
+ *                $ref: '#/components/schemas/Usuario'
+ *      404:
+ *        description: Usuario no encontrado
+ */
+ruta.get('/Usuario/:idUsuario', (req, res) => {
+    const {idUsuario} = req.params
+    mysqlConnection.query('CALL R_UsuarioByID(?)', [idUsuario], (err, rows, fields) =>{
+        if(!err){
+            if(!(rows[0][0]).hasOwnProperty("Respuesta")){
+                res.status(200).json(rows[0][0])
+            }else{
+                res.status(404).json(rows[0])
+            }
+        }else{
+            res.status(500).json(err)
         }
     })
 })
