@@ -86,7 +86,7 @@ ruta.get('/Seguidor/:idUsuario/:idSeguidor', (req, res) =>{
 
 /**
  * @swagger
- * /Seguidor/Seguidores/{idUsuario}:
+ * /Seguidores/{idUsuario}:
  *  get:
  *    summary: Retorna la lista de usuarios que siguen al usuario dado
  *    tags: [Seguidor]
@@ -102,7 +102,7 @@ ruta.get('/Seguidor/:idUsuario/:idSeguidor', (req, res) =>{
  *      404:
  *        description: Usuario no encontrado
  */
-ruta.get('/Seguidor/Seguidores/:idUsuario', (req, res) =>{
+ruta.get('/Seguidores/:idUsuario', (req, res) =>{
     const {idUsuario} = req.params;
     mysqlConnection.query('CALL R_Seguidores(?)',[idUsuario], (err, rows, fields) =>{
         if(!err){
@@ -131,7 +131,7 @@ ruta.get('/Seguidor/Seguidores/:idUsuario', (req, res) =>{
  *      404:
  *        description: Usuario no encontrado
  */
-ruta.get('/Seguidor/Siguiendo/:idUsuario', (req, res) =>{
+ruta.get('/Siguiendo/:idUsuario', (req, res) =>{
     const {idUsuario} = req.params;
     mysqlConnection.query('CALL R_Siguiendo(?)',[idUsuario], (err, rows, fields) =>{
         if(!err){
