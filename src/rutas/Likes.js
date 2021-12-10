@@ -34,8 +34,8 @@ ruta.post('/Likes',(req, res) =>{
     })
 })
 
-ruta.delete('/Likes',(req, res) =>{
-    const {idTweet, idUsuario} = req.body
+ruta.delete('/Likes/:idTweet/:idUsuario',(req, res) =>{
+    const {idTweet, idUsuario} = req.params
     mysqlConnection.query('CALL D_Likes(?, ?)', [idTweet, idUsuario], (err, rows, fields) =>{
         if(!err){
             res.status(200).json(rows[0][0])

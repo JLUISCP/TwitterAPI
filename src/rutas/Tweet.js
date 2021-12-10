@@ -139,8 +139,8 @@ ruta.get('/Tweet/Content/:Keyword', (req, res) => {
  *
  */
 ruta.post('/Tweet', (req, res) =>{
-    const {Cuerpo, FechaHoraPublicacion, idUsuario} = req.body
-    mysqlConnection.query('CALL CU_Tweet(?, ?, ?, ?)', [0, Cuerpo, FechaHoraPublicacion, idUsuario], (err, rows, fields) =>{
+    const {idUsuario, FotoPerfil, Nombre, ApellidoPaterno, ApellidoMaterno, FechaNacimiento, Email, NombreUsuario, Password, idTipoUsuario} = req.body
+    mysqlConnection.query('CALL CU_Tweet(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', [idUsuario, FotoPerfil, Nombre, ApellidoPaterno, ApellidoMaterno, FechaNacimiento, Email, NombreUsuario, Password, idTipoUsuario], (err, rows, fields) =>{
         if(!err){
             res.status(201).json(rows[0][0])
         }else{
@@ -169,16 +169,12 @@ ruta.post('/Tweet', (req, res) =>{
  *      404:
  *        description: Tweet no encontrado
  */
-ruta.put('/Tweet/:idTweet',[
-    body("Cuerpo", "Ingrese el contenido del Tweet").exists(),
-    body("FechaHoraPublicacion", "Ingrese la fecha de publicacion del Tweet").exists(),
-    body("idUsuario", "Ingrese el id del Usuario que publica este Tweet").exists()
-], (req, res) =>{
+ruta.put('/Tweet/:idTweet', (req, res) =>{
     const {idTweet} = req.params
-    const {Cuerpo, FechaHoraPublicacion, idUsuario} = req.body
-    mysqlConnection.query('CALL CU_Tweet(?, ?, ?, ?)', [idTweet, Cuerpo, FechaHoraPublicacion, idUsuario], (err, rows, fields) =>{
+    const {FotoPerfil, Nombre, ApellidoPaterno, ApellidoMaterno, FechaNacimiento, Email, NombreUsuario, Password, idTipoUsuario} = req.body
+    mysqlConnection.query('CALL CU_Tweet(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', [idUsuario, FotoPerfil, Nombre, ApellidoPaterno, ApellidoMaterno, FechaNacimiento, Email, NombreUsuario, Password, idTipoUsuario], (err, rows, fields) =>{
         if(!err){
-            res.json(rows[0])
+            res.status(200).json(rows[0][0])
         }else{
             console.log(err)
         }

@@ -193,22 +193,14 @@ ruta.post('/Seguidor',[
  *      404:
  *        description: este follow no existe
  */
-ruta.delete('/Seguidor',[
-    body("idUsuario", "Ingrese el id del usuario que se esta siguiendo").exists(),
-    body("idSeguidor", "Ingrese el id del usuario que sigue y quiere quitar el follow").exists()
-], (req, res) =>{
-    const errors = validationResult(req)
-    if(errors.isEmpty()){
-        const {idUsuario, idSeguidor} = req.body
-        mysqlConnection.query('CALL D_Unfollow(?, ?)', [idUsuario, idSeguidor], (err, rows, fields) =>{
-            if(!err){
-                res.status(200).json(rows[0])
-            }else{
-                res.status(400).json(errors.array())
-            }
-        })
-    }else{
-
-    }
+ruta.delete('/Seguidor', (req, res) =>{
+    const {idUsuario, idSeguidor} = req.body
+    mysqlConnection.query('CALL D_Unfollow(?, ?)', [idUsuario, idSeguidor], (err, rows, fields) =>{
+        if(!err){
+            res.status(200).json(rows[0][0])
+        }else{
+            res.status(400)
+        }
+    })
 })
 module.exports = ruta
