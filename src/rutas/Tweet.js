@@ -139,8 +139,8 @@ ruta.get('/Tweet/Content/:Keyword', (req, res) => {
  *
  */
 ruta.post('/Tweet', (req, res) =>{
-    const {idUsuario, FotoPerfil, Nombre, ApellidoPaterno, ApellidoMaterno, FechaNacimiento, Email, NombreUsuario, Password, idTipoUsuario} = req.body
-    mysqlConnection.query('CALL CU_Tweet(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', [idUsuario, FotoPerfil, Nombre, ApellidoPaterno, ApellidoMaterno, FechaNacimiento, Email, NombreUsuario, Password, idTipoUsuario], (err, rows, fields) =>{
+    const {Cuerpo, FechaHoraPublicacion, idUsuario} = req.body
+    mysqlConnection.query('CALL CU_Tweet(?, ?, ?, ?)', [0, Cuerpo, FechaHoraPublicacion, idUsuario], (err, rows, fields) =>{
         if(!err){
             res.status(201).json(rows[0][0])
         }else{
@@ -171,8 +171,8 @@ ruta.post('/Tweet', (req, res) =>{
  */
 ruta.put('/Tweet/:idTweet', (req, res) =>{
     const {idTweet} = req.params
-    const {FotoPerfil, Nombre, ApellidoPaterno, ApellidoMaterno, FechaNacimiento, Email, NombreUsuario, Password, idTipoUsuario} = req.body
-    mysqlConnection.query('CALL CU_Tweet(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', [idUsuario, FotoPerfil, Nombre, ApellidoPaterno, ApellidoMaterno, FechaNacimiento, Email, NombreUsuario, Password, idTipoUsuario], (err, rows, fields) =>{
+    const {Cuerpo, FechaHoraPublicacion, idUsuario} = req.body
+    mysqlConnection.query('CALL CU_Tweet(?, ?, ?, ?)', [idTweet, Cuerpo, FechaHoraPublicacion, idUsuario], (err, rows, fields) =>{
         if(!err){
             res.status(200).json(rows[0][0])
         }else{

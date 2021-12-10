@@ -144,15 +144,11 @@ ruta.get('/Usuario/:idUsuario', (req, res) => {
  *        description: Error con el servidor
  *
  */
-ruta.post('/Usuario',[
-    body("Nombre", "Ingrese un nombre para el usuario").exists(),
-    body("NombreUsuario", "Ingrese el nombre de usuario para el usuario").exists(),
-    body("Contraseña", "Ingrese la contraseña par la cuenta de este usuario").exists()
-], (req, res) =>{
-    const {Nombre, NombreUsuario, Contraseña} = req.body
-    mysqlConnection.query('CALL CU_Usuario(?, ?, ?, ?)', [0, Nombre, NombreUsuario, Contraseña], (err, rows, fields) =>{
+ruta.post('/Usuario', (req, res) =>{
+    const {idUsuario, FotoPerfil, Nombre, ApellidoPaterno, ApellidoMaterno, FechaNacimiento, Email, NombreUsuario, Password, idTipoUsuario} = req.body
+    mysqlConnection.query('CALL CU_Usuario(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', [idUsuario, FotoPerfil, Nombre, ApellidoPaterno, ApellidoMaterno, FechaNacimiento, Email, NombreUsuario, Password, idTipoUsuario], (err, rows, fields) =>{
         if(!err){
-            res.json({Status: 'Usuario guardado'})
+            res.status(201).json(rows[0][0])
         }else{
             console.log(err)
         }
@@ -179,14 +175,10 @@ ruta.post('/Usuario',[
  *      404:
  *        description: Usuario no encontrado
  */
-ruta.put('/Usuario/:idUsuario',[
-    body("Nombre", "Ingrese un nombre para el usuario").exists(),
-    body("NombreUsuario", "Ingrese el nombre de usuario para el usuario").exists(),
-    body("Contraseña", "Ingrese la contraseña par la cuenta de este usuario").exists()
-], (req, res) =>{
+ruta.put('/Usuario/:idUsuario', (req, res) =>{
     const {idUsuario} = req.params
-    const {Nombre, NombreUsuario, Password} = req.body
-    mysqlConnection.query('CALL CU_Usuario(?, ?, ?, ?)', [idUsuario, Nombre, NombreUsuario, Password], (err, rows, fields) =>{
+    const {FotoPerfil, Nombre, ApellidoPaterno, ApellidoMaterno, FechaNacimiento, Email, NombreUsuario, Password, idTipoUsuario} = req.body
+    mysqlConnection.query('CALL CU_Usuario(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', [idUsuario, FotoPerfil, Nombre, ApellidoPaterno, ApellidoMaterno, FechaNacimiento, Email, NombreUsuario, Password, idTipoUsuario], (err, rows, fields) =>{
         if(!err){
             res.json({Status: 'Usuario actualizado'})
         }else{
