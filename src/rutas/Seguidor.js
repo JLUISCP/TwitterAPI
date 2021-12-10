@@ -64,9 +64,30 @@ ruta.get('/Seguidor', (req, res) =>{
 
 /**
  * @swagger
- * /Seguidor/Siguiendo/{idUsuario}:
+ * /Seguidor/{idUsuario}/{idSeguidor}:
  *  get:
- *    summary: retorna la lista de las personas que sigue un usuario
+ *    summary: Retorna un True o False si la relacion entre los 2 usuarios existen
+ *    tags: [Seguidor]
+ *    responses:
+ *      200:
+ *        description: Usuario seguido
+ */
+ruta.get('/Seguidor/:idUsuario/:idSeguidor', (req, res) =>{
+    const {idUsuario, idSeguidor} = req.params
+    mysqlConnection.query('CALL R_IsFollowing(?, ?)',[idUsuario, idSeguidor], (err, rows, fields) =>{
+        if(!err){
+            res.json(rows[0])
+        }else{
+            console.log(err)
+        }
+    })
+})
+
+/**
+ * @swagger
+ * /Seguidor/Seguidores/{idUsuario}:
+ *  get:
+ *    summary: Retorna la lista de usuarios que siguen al usuario dado
  *    tags: [Seguidor]
  *    parameters:
  *      - $ref: '#/components/parameters/idUsuario'
@@ -80,7 +101,7 @@ ruta.get('/Seguidor', (req, res) =>{
  *      404:
  *        description: Usuario no encontrado
  */
-ruta.get('/Seguidor/Siguiendo/:idUsuario', (req, res) =>{
+ruta.get('/Seguidor/Seguidores/:idUsuario', (req, res) =>{
     const {idUsuario} = req.params;
     mysqlConnection.query('CALL R_Siguiendo(?)',[idUsuario], (err, rows, fields) =>{
         if(!err){
@@ -93,9 +114,9 @@ ruta.get('/Seguidor/Siguiendo/:idUsuario', (req, res) =>{
 
 /**
  * @swagger
- * /Seguidor/Seguido/{idUsuario}:
+ * /Seguidor/Siguiendo/{idUsuario}:
  *  get:
- *    summary: retorna liste de usuarios que siguen a un usuario determinado
+ *    summary: Retorna la lista de usuarios que el usuario dado sigue
  *    tags: [Seguidor]
  *    parameters:
  *      - $ref: '#/components/parameters/idUsuario'
@@ -109,7 +130,7 @@ ruta.get('/Seguidor/Siguiendo/:idUsuario', (req, res) =>{
  *      404:
  *        description: Usuario no encontrado
  */
-ruta.get('/Seguidor/Seguido/:idUsuario', (req, res) =>{
+ruta.get('/Seguidor/Siguiendo/:idUsuario', (req, res) =>{
     const {idUsuario} = req.params;
     mysqlConnection.query('CALL R_Seguido(?)',[idUsuario], (err, rows, fields) =>{
         if(!err){
