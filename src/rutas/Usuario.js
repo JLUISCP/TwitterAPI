@@ -146,7 +146,7 @@ ruta.get('/Usuario/:idUsuario', (req, res) => {
  */
 ruta.post('/Usuario', (req, res) =>{
     const {idUsuario, FotoPerfil, Nombre, ApellidoPaterno, ApellidoMaterno, FechaNacimiento, Email, NombreUsuario, Password, idTipoUsuario} = req.body
-    mysqlConnection.query('CALL CU_Usuario(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', [idUsuario, FotoPerfil, Nombre, ApellidoPaterno, ApellidoMaterno, FechaNacimiento, Email, NombreUsuario, Password, idTipoUsuario], (err, rows, fields) =>{
+    mysqlConnection.query('CALL CU_Usuario(?, ?, ?, ?, ?, ?, ?, ?, ?)', [idUsuario, Nombre, ApellidoPaterno, ApellidoMaterno, FechaNacimiento, Email, NombreUsuario, Password, idTipoUsuario], (err, rows, fields) =>{
         if(!err){
             res.status(201).json(rows[0][0])
         }else{
@@ -178,7 +178,7 @@ ruta.post('/Usuario', (req, res) =>{
 ruta.put('/Usuario/:idUsuario', (req, res) =>{
     const {idUsuario} = req.params
     const {FotoPerfil, Nombre, ApellidoPaterno, ApellidoMaterno, FechaNacimiento, Email, NombreUsuario, Password, idTipoUsuario} = req.body
-    mysqlConnection.query('CALL CU_Usuario(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', [idUsuario, FotoPerfil, Nombre, ApellidoPaterno, ApellidoMaterno, FechaNacimiento, Email, NombreUsuario, Password, idTipoUsuario], (err, rows, fields) =>{
+    mysqlConnection.query('CALL CU_Usuario(?, ?, ?, ?, ?, ?, ?, ?, ?)', [idUsuario, Nombre, ApellidoPaterno, ApellidoMaterno, FechaNacimiento, Email, NombreUsuario, Password, idTipoUsuario], (err, rows, fields) =>{
         if(!err){
             res.json({Status: 'Usuario actualizado'})
         }else{
