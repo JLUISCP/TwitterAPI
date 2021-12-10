@@ -161,14 +161,11 @@ ruta.get('/Siguiendo/:idUsuario', (req, res) =>{
  *        description: Error con el servidor
  *
  */
-ruta.post('/Seguidor',[
-    body("idUsuario", "Ingrese el id del usuario a seguir").exists(),
-    body("idSeguidor", "Ingrese el id del usuario que sigue").exists()
-], (req, res) =>{
+ruta.post('/Seguidor', (req, res) =>{
     const {idUsuario, idSeguidor} = req.body
     mysqlConnection.query('CALL C_Seguidor(?, ?)', [idUsuario, idSeguidor], (err, rows, fields) =>{
         if(!err){
-            res.json(rows[0])
+            res.status(201).json(rows[0][0])
         }else{
             console.log(err)
         }
