@@ -76,8 +76,9 @@ ruta.get('/Seguidor/:idUsuario/:idSeguidor', (req, res) =>{
     const {idUsuario, idSeguidor} = req.params
     mysqlConnection.query('CALL R_IsFollowing(?, ?)',[idUsuario, idSeguidor], (err, rows, fields) =>{
         if(!err){
-            res.json(rows[0])
+            res.status(200).json(rows[0][0])
         }else{
+            res.status(500)
             console.log(err)
         }
     })
@@ -103,7 +104,7 @@ ruta.get('/Seguidor/:idUsuario/:idSeguidor', (req, res) =>{
  */
 ruta.get('/Seguidor/Seguidores/:idUsuario', (req, res) =>{
     const {idUsuario} = req.params;
-    mysqlConnection.query('CALL R_Siguiendo(?)',[idUsuario], (err, rows, fields) =>{
+    mysqlConnection.query('CALL R_Seguidores(?)',[idUsuario], (err, rows, fields) =>{
         if(!err){
             res.json(rows[0])
         }else{
@@ -132,7 +133,7 @@ ruta.get('/Seguidor/Seguidores/:idUsuario', (req, res) =>{
  */
 ruta.get('/Seguidor/Siguiendo/:idUsuario', (req, res) =>{
     const {idUsuario} = req.params;
-    mysqlConnection.query('CALL R_Seguido(?)',[idUsuario], (err, rows, fields) =>{
+    mysqlConnection.query('CALL R_Siguiendo(?)',[idUsuario], (err, rows, fields) =>{
         if(!err){
             res.json(rows[0])
         }else{
