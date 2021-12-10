@@ -108,6 +108,17 @@ ruta.get('/Tweet/:idUsuario', (req, res) => {
     })
 })
 
+ruta.get('/Tweet/Content/:Keyword', (req, res) => {
+    const {Keyword} = req.params
+    mysqlConnection.query('CALL S_InTweet(?)', [Keyword], (err, rows, fields) =>{
+        if(!err){
+            res.status(200).json(rows[0])
+        }else{
+            console.log(err)
+        }
+    })
+})
+
 /**
  * @swagger
  * /Tweet:

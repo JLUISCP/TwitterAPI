@@ -15,6 +15,7 @@ app.use(require("./rutas/Usuario.js"))
 app.use(require("./rutas/Tweet.js"))
 app.use(require("./rutas/Seguidor.js"))
 app.use(require("./rutas/Login.js"))
+app.use(require("./rutas/Likes.js"))
 
 
 //DOCUMENTACION SWAGGER

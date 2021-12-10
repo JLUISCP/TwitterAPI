@@ -1,6 +1,5 @@
 const express = require('express')
 const ruta = express.Router()
-const bcrypt = require("bcryptjs");
 const mysqlConnection = require('../database')
 
 /**
