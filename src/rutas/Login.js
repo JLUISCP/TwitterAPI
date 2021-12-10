@@ -48,11 +48,7 @@ ruta.post('/Login',(req, res) =>{
     const {NombreUsuario, Contraseña} = req.body
     mysqlConnection.query('CALL R_Login(?, ?)', [NombreUsuario, Contraseña], (err, rows, fields) =>{
         if(!err){
-            if(!(rows[0][0]).hasOwnProperty("Respuesta")){
-                res.status(200).json(rows[0][0])
-            }else{
-                res.status(404).json(rows[0][0])
-            }
+            res.status(201).json(rows[0][0])
         }else{
             res.status(500)
         }

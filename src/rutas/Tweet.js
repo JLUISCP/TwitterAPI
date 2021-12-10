@@ -127,17 +127,13 @@ ruta.get('/Tweet/:idUsuario', (req, res) => {
  *        description: Error con el servidor
  *
  */
-ruta.post('/Tweet',[
-    body("Cuerpo", "Ingrese el contenido del Tweet").exists(),
-    body("FechaHoraPublicacion", "Ingrese la fecha de publicacion del Tweet").exists(),
-    body("idUsuario", "Ingrese el id del Usuario que publica este Tweet").exists()
-], (req, res) =>{
+ruta.post('/Tweet', (req, res) =>{
     const {Cuerpo, FechaHoraPublicacion, idUsuario} = req.body
     mysqlConnection.query('CALL CU_Tweet(?, ?, ?, ?)', [0, Cuerpo, FechaHoraPublicacion, idUsuario], (err, rows, fields) =>{
         if(!err){
-            res.json(rows[0])
+            res.status(201).json(rows[0][0])
         }else{
-            console.log(err)
+            res.status(500)
         }
     })
 })
