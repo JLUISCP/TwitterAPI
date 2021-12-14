@@ -1,6 +1,8 @@
 const express = require('express')
 const ruta = express.Router()
 const mysqlConnection = require('../database')
+const config = require('../config')
+const jwt = require('jsonwebtoken')
 
 /**
  * @swagger
@@ -11,15 +13,14 @@ const mysqlConnection = require('../database')
  *      properties:
  *        NombreUsuario:
  *          type: string
- *          description: id de un Usuario
+ *          description: nombre de usuario para el sistema (Twitter academico)
  *        Contraseña:
  *          type: string
- *          description: id del usuario que toma el rol de seguidor
+ *          description: contraseña de acceso a la cuenta del usuario
  *      required:
  *        - NombreUsuario
  *        - Contraseña
  */
-
 /**
  * @swagger
  * tags:
@@ -31,7 +32,7 @@ const mysqlConnection = require('../database')
  * @swagger
  * /Login:
  *  post:
- *    summary: retorna un usuario si las credenciales son validas
+ *    summary: Retorna un usuario y un token si las credenciales son validas
  *    tags: [Login]
  *    requestBody:
  *      required: true
@@ -45,11 +46,20 @@ const mysqlConnection = require('../database')
  */
 ruta.post('/Login',(req, res) =>{
     const {NombreUsuario, Contraseña} = req.body
+    console.log(NombreUsuario, Contraseña)
     mysqlConnection.query('CALL R_Login(?, ?)', [NombreUsuario, Contraseña], (err, rows, fields) =>{
         if(!err){
-            res.status(201).json(rows[0][0])
+            if(!rows[0][0].hasOwnProperty('idUsuario')){
+                res.status(200).json(rows[0][0])
+            }else{
+                const token = jwt.sign({User: NombreUsuario, Pss: Contraseña}, config.secret, {
+                    expiresIn: 60 * 60 * 24
+                })
+                rows[0][0].token = token
+                res.status(200).json(rows[0][0])
+            }
         }else{
-            res.status(500)
+            res.status(500).json('Error de conexion con el servidor')
         }
     })
 })

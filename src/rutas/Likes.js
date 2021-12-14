@@ -1,8 +1,10 @@
 const express = require('express')
 const ruta = express.Router()
 const mysqlConnection = require('../database')
+const verificarToken = require('../auth')
 
-ruta.get('/Likes/:idTweet/:idUsuario',(req, res) =>{
+
+ruta.get('/Likes/:idTweet/:idUsuario', verificarToken, (req, res) =>{
     const {idTweet, idUsuario} = req.params
     mysqlConnection.query('CALL R_IsLiked(?,?)', [idTweet, idUsuario], (err, rows, fields) =>{
         if(!err){
@@ -13,7 +15,7 @@ ruta.get('/Likes/:idTweet/:idUsuario',(req, res) =>{
     })
 })
 
-ruta.get('/Likes/:idTweet',(req, res) =>{
+ruta.get('/Likes/:idTweet', verificarToken, (req, res) =>{
     const {idTweet} = req.params
     mysqlConnection.query('CALL R_CantidadLikes(?)', [idTweet], (err, rows, fields) =>{
         if(!err){
@@ -23,7 +25,7 @@ ruta.get('/Likes/:idTweet',(req, res) =>{
         }
     })
 })
-ruta.post('/Likes',(req, res) =>{
+ruta.post('/Likes', verificarToken, (req, res) =>{
     const {idTweet, idUsuario} = req.body
     mysqlConnection.query('CALL C_Likes(?, ?)', [idTweet, idUsuario], (err, rows, fields) =>{
         if(!err){
@@ -34,7 +36,7 @@ ruta.post('/Likes',(req, res) =>{
     })
 })
 
-ruta.delete('/Likes/:idTweet/:idUsuario',(req, res) =>{
+ruta.delete('/Likes/:idTweet/:idUsuario', verificarToken, (req, res) =>{
     const {idTweet, idUsuario} = req.params
     mysqlConnection.query('CALL D_Likes(?, ?)', [idTweet, idUsuario], (err, rows, fields) =>{
         if(!err){

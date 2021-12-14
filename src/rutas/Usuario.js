@@ -1,8 +1,8 @@
 const express = require('express');
 const ruta = express.Router();
-const bcrypt = require("bcryptjs");
-const { body, validationResult } = require('express-validator')
 const mysqlConnection = require('../database')
+const verificarToken = require('../auth')
+
 
 /**
  * @swagger
@@ -80,7 +80,7 @@ const mysqlConnection = require('../database')
  *              items:
  *                $ref: '#/components/schemas/Usuario'
  */
-ruta.get('/Usuario', (req, res) => {
+ruta.get('/Usuario', verificarToken, (req, res) => {
     mysqlConnection.query('CALL R_Usuario()', (err, rows, fields) =>{
         if(!err){
             res.json(rows[0])
@@ -110,7 +110,7 @@ ruta.get('/Usuario', (req, res) => {
  *      404:
  *        description: Usuario no encontrado
  */
-ruta.get('/Usuario/:idUsuario', (req, res) => {
+ruta.get('/Usuario/:idUsuario', verificarToken, (req, res) => {
     const {idUsuario} = req.params
     mysqlConnection.query('CALL R_UsuarioByID(?)', [idUsuario], (err, rows, fields) =>{
         if(!err){
@@ -144,7 +144,7 @@ ruta.get('/Usuario/:idUsuario', (req, res) => {
  *        description: Error con el servidor
  *
  */
-ruta.post('/Usuario', (req, res) =>{
+ruta.post('/Usuario', verificarToken, (req, res) =>{
     const {idUsuario, FotoPerfil, Nombre, ApellidoPaterno, ApellidoMaterno, FechaNacimiento, Email, NombreUsuario, Password, idTipoUsuario} = req.body
     mysqlConnection.query('CALL CU_Usuario(?, ?, ?, ?, ?, ?, ?, ?, ?)', [idUsuario, Nombre, ApellidoPaterno, ApellidoMaterno, FechaNacimiento, Email, NombreUsuario, Password, idTipoUsuario], (err, rows, fields) =>{
         if(!err){
@@ -175,9 +175,9 @@ ruta.post('/Usuario', (req, res) =>{
  *      404:
  *        description: Usuario no encontrado
  */
-ruta.put('/Usuario/:idUsuario', (req, res) =>{
+ruta.put('/Usuario/:idUsuario', verificarToken, (req, res) =>{
     const {idUsuario} = req.params
-    const {FotoPerfil, Nombre, ApellidoPaterno, ApellidoMaterno, FechaNacimiento, Email, NombreUsuario, Password, idTipoUsuario} = req.body
+    const {Nombre, ApellidoPaterno, ApellidoMaterno, FechaNacimiento, Email, NombreUsuario} = req.body
     mysqlConnection.query('CALL CU_Usuario(?, ?, ?, ?, ?, ?, ?, ?, ?)', [idUsuario, Nombre, ApellidoPaterno, ApellidoMaterno, FechaNacimiento, Email, NombreUsuario, Password, idTipoUsuario], (err, rows, fields) =>{
         if(!err){
             res.json({Status: 'Usuario actualizado'})
@@ -201,7 +201,7 @@ ruta.put('/Usuario/:idUsuario', (req, res) =>{
  *      404:
  *        description: Usuario no encontrado
  */
-ruta.delete('/Usuario/:idUsuario', (req, res) =>{
+ruta.delete('/Usuario/:idUsuario', verificarToken, (req, res) =>{
     const {idUsuario} = req.params;
     mysqlConnection.query('CALL D_Usuario(?)', [idUsuario], (err, rows, fields) =>{
         if(!err){

@@ -2,6 +2,8 @@ const express = require('express');
 const ruta = express.Router();
 const { body, validationResult } = require('express-validator');
 const mysqlConnection = require('../database')
+const verificarToken = require('../auth')
+
 
 /**
  * @swagger
@@ -52,7 +54,7 @@ const mysqlConnection = require('../database')
  *              items:
  *                $ref: '#/components/schemas/Seguidor'
  */
-ruta.get('/Seguidor', (req, res) =>{
+ruta.get('/Seguidor', verificarToken, (req, res) =>{
     mysqlConnection.query('CALL R_Seguidor()', (err, rows, fields) =>{
         if(!err){
             res.json(rows[0])
@@ -72,7 +74,7 @@ ruta.get('/Seguidor', (req, res) =>{
  *      200:
  *        description: Usuario seguido
  */
-ruta.get('/Seguidor/:idUsuario/:idSeguidor', (req, res) =>{
+ruta.get('/Seguidor/:idUsuario/:idSeguidor', verificarToken, (req, res) =>{
     const {idUsuario, idSeguidor} = req.params
     mysqlConnection.query('CALL R_IsFollowing(?, ?)',[idUsuario, idSeguidor], (err, rows, fields) =>{
         if(!err){
@@ -102,7 +104,7 @@ ruta.get('/Seguidor/:idUsuario/:idSeguidor', (req, res) =>{
  *      404:
  *        description: Usuario no encontrado
  */
-ruta.get('/Seguidores/:idUsuario', (req, res) =>{
+ruta.get('/Seguidores/:idUsuario', verificarToken, (req, res) =>{
     const {idUsuario} = req.params;
     mysqlConnection.query('CALL R_Seguidores(?)',[idUsuario], (err, rows, fields) =>{
         if(!err){
@@ -131,7 +133,7 @@ ruta.get('/Seguidores/:idUsuario', (req, res) =>{
  *      404:
  *        description: Usuario no encontrado
  */
-ruta.get('/Siguiendo/:idUsuario', (req, res) =>{
+ruta.get('/Siguiendo/:idUsuario', verificarToken, (req, res) =>{
     const {idUsuario} = req.params;
     mysqlConnection.query('CALL R_Siguiendo(?)',[idUsuario], (err, rows, fields) =>{
         if(!err){
@@ -161,7 +163,7 @@ ruta.get('/Siguiendo/:idUsuario', (req, res) =>{
  *        description: Error con el servidor
  *
  */
-ruta.post('/Seguidor', (req, res) =>{
+ruta.post('/Seguidor', verificarToken, (req, res) =>{
     const {idUsuario, idSeguidor} = req.body
     mysqlConnection.query('CALL C_Seguidor(?, ?)', [idUsuario, idSeguidor], (err, rows, fields) =>{
         if(!err){
@@ -190,7 +192,7 @@ ruta.post('/Seguidor', (req, res) =>{
  *      404:
  *        description: este follow no existe
  */
-ruta.delete('/Seguidor/:idUsuario/:idSeguidor', (req, res) =>{
+ruta.delete('/Seguidor/:idUsuario/:idSeguidor', verificarToken, (req, res) =>{
     const {idUsuario, idSeguidor} = req.params
     mysqlConnection.query('CALL D_Unfollow(?, ?)', [idUsuario, idSeguidor], (err, rows, fields) =>{
         if(!err){
