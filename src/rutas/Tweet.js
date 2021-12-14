@@ -74,7 +74,7 @@ ruta.get('/Tweet', verificarToken, (req, res) => {
         if(!err){
             res.json(rows[0])
         }else{
-            console.log(err)
+            res.status(500)
         }
     })
 })
@@ -114,7 +114,7 @@ ruta.get('/Tweet/:idUsuario', verificarToken, (req, res) => {
         if(!err){
             res.json(rows[0])
         }else{
-            console.log(err)
+            res.status(500)
         }
     })
 })
@@ -125,7 +125,7 @@ ruta.get('/Tweet/Content/:Keyword', verificarToken, (req, res) => {
         if(!err){
             res.status(200).json(rows[0])
         }else{
-            console.log(err)
+            res.status(500)
         }
     })
 })
@@ -187,7 +187,7 @@ ruta.put('/Tweet/:idTweet', verificarToken, (req, res) =>{
         if(!err){
             res.status(200).json(rows[0][0])
         }else{
-            console.log(err)
+            res.status(500)
         }
     })
 })
@@ -212,7 +212,7 @@ ruta.delete('/Tweet/:idTweet', verificarToken, (req, res) =>{
         if(!err){
             res.json(rows[0][0])
         }else{
-            console.log(err)
+            res.status(500)
         }
     })
 })

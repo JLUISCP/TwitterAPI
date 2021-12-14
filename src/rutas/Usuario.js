@@ -85,7 +85,7 @@ ruta.get('/Usuario', verificarToken, (req, res) => {
         if(!err){
             res.json(rows[0])
         }else{
-            console.log(err)
+            res.status(500)
         }
     })
 })
@@ -114,11 +114,7 @@ ruta.get('/Usuario/:idUsuario', verificarToken, (req, res) => {
     const {idUsuario} = req.params
     mysqlConnection.query('CALL R_UsuarioByID(?)', [idUsuario], (err, rows, fields) =>{
         if(!err){
-            if(!(rows[0][0]).hasOwnProperty("Respuesta")){
-                res.status(200).json(rows[0][0])
-            }else{
-                res.status(404).json(rows[0])
-            }
+            res.status(200).json(rows[0][0])
         }else{
             res.status(500).json(err)
         }
@@ -144,7 +140,7 @@ ruta.get('/Usuario/:idUsuario', verificarToken, (req, res) => {
  *        description: Error con el servidor
  *
  */
-ruta.post('/Usuario', verificarToken, (req, res) =>{
+ruta.post('/Usuario', (req, res) =>{
     const {idUsuario, FotoPerfil, Nombre, ApellidoPaterno, ApellidoMaterno, FechaNacimiento, Email, NombreUsuario, Password, idTipoUsuario} = req.body
     mysqlConnection.query('CALL CU_Usuario(?, ?, ?, ?, ?, ?, ?, ?, ?)', [idUsuario, Nombre, ApellidoPaterno, ApellidoMaterno, FechaNacimiento, Email, NombreUsuario, Password, idTipoUsuario], (err, rows, fields) =>{
         if(!err){
@@ -180,9 +176,9 @@ ruta.put('/Usuario/:idUsuario', verificarToken, (req, res) =>{
     const {Nombre, ApellidoPaterno, ApellidoMaterno, FechaNacimiento, Email, NombreUsuario} = req.body
     mysqlConnection.query('CALL CU_Usuario(?, ?, ?, ?, ?, ?, ?, ?, ?)', [idUsuario, Nombre, ApellidoPaterno, ApellidoMaterno, FechaNacimiento, Email, NombreUsuario, Password, idTipoUsuario], (err, rows, fields) =>{
         if(!err){
-            res.json({Status: 'Usuario actualizado'})
+            res.status(200).json(rows[0][0])
         }else{
-            console.log(err)
+            res.status(500)
         }
     })
 })
@@ -205,9 +201,9 @@ ruta.delete('/Usuario/:idUsuario', verificarToken, (req, res) =>{
     const {idUsuario} = req.params;
     mysqlConnection.query('CALL D_Usuario(?)', [idUsuario], (err, rows, fields) =>{
         if(!err){
-            res.json({Status: 'Usuario eliminados'})
+            res.status(200).json(rows[0][0])
         }else{
-            console.log(err)
+            res.status(500)
         }
     })
 })

@@ -57,7 +57,7 @@ const verificarToken = require('../auth')
 ruta.get('/Seguidor', verificarToken, (req, res) =>{
     mysqlConnection.query('CALL R_Seguidor()', (err, rows, fields) =>{
         if(!err){
-            res.json(rows[0])
+            res.status(200).json(rows[0])
         }else{
             console.log(err)
         }
@@ -81,7 +81,6 @@ ruta.get('/Seguidor/:idUsuario/:idSeguidor', verificarToken, (req, res) =>{
             res.status(200).json(rows[0][0])
         }else{
             res.status(500)
-            console.log(err)
         }
     })
 })
@@ -110,7 +109,7 @@ ruta.get('/Seguidores/:idUsuario', verificarToken, (req, res) =>{
         if(!err){
             res.json(rows[0])
         }else{
-            console.log(err)
+            res.status(500)
         }
     })
 })
@@ -139,7 +138,7 @@ ruta.get('/Siguiendo/:idUsuario', verificarToken, (req, res) =>{
         if(!err){
             res.json(rows[0])
         }else{
-            console.log(err)
+            res.status(500)
         }
     })
 })
@@ -169,7 +168,7 @@ ruta.post('/Seguidor', verificarToken, (req, res) =>{
         if(!err){
             res.status(201).json(rows[0][0])
         }else{
-            console.log(err)
+            res.status(500)
         }
     })
 })
@@ -198,7 +197,7 @@ ruta.delete('/Seguidor/:idUsuario/:idSeguidor', verificarToken, (req, res) =>{
         if(!err){
             res.status(200).json(rows[0][0])
         }else{
-            res.status(400)
+            res.status(500)
         }
     })
 })

@@ -46,17 +46,15 @@ const jwt = require('jsonwebtoken')
  */
 ruta.post('/Login',(req, res) =>{
     const {NombreUsuario, Contraseña} = req.body
-    console.log(NombreUsuario, Contraseña)
     mysqlConnection.query('CALL R_Login(?, ?)', [NombreUsuario, Contraseña], (err, rows, fields) =>{
         if(!err){
             if(!rows[0][0].hasOwnProperty('idUsuario')){
                 res.status(200).json(rows[0][0])
             }else{
-                const token = jwt.sign({User: NombreUsuario, Pss: Contraseña}, config.secret, {
+                rows[0][0].Token = jwt.sign({User: NombreUsuario, Pss: Contraseña}, config.secret, {
                     expiresIn: 60 * 60 * 24
                 })
-                rows[0][0].token = token
-                res.status(200).json(rows[0][0])
+                res.status(201).json(rows[0][0])
             }
         }else{
             res.status(500).json('Error de conexion con el servidor')
