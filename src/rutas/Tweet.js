@@ -79,12 +79,25 @@ ruta.get('/Tweet', verificarToken, (req, res) => {
     })
 })
 
+ruta.get('/TweetByID/:idTweet', verificarToken, (req, res) => {
+    const {idTweet} = req.params
+    mysqlConnection.query('CALL R_TweetByID(?)', [idTweet], (err, rows, fields) =>{
+        if(!err){
+            res.json(rows[0][0])
+        }else{
+            res.status(500)
+            console.log(err)
+        }
+    })
+})
+
 ruta.get('/TweetPerfil/:idUsuario', verificarToken, (req, res) => {
     const {idUsuario} = req.params
     mysqlConnection.query('CALL R_TweetsPerfil(?)', [idUsuario], (err, rows, fields) =>{
         if(!err){
             res.json(rows[0])
         }else{
+            res.status(500)
             console.log(err)
         }
     })
