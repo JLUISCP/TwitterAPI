@@ -121,6 +121,17 @@ ruta.get('/Usuario/:idUsuario', verificarToken, (req, res) => {
     })
 })
 
+ruta.get('/Usuario/Content/:Keyword', verificarToken, (req, res) => {
+    const {Keyword} = req.params
+    mysqlConnection.query('CALL S_Usuario(?)', [Keyword], (err, rows, fields) =>{
+        if(!err){
+            res.status(200).json(rows[0])
+        }else{
+            res.status(500)
+        }
+    })
+})
+
 /**
  * @swagger
  * /Usuario:
