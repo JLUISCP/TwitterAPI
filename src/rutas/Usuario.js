@@ -1,8 +1,7 @@
-const express = require('express');
-const ruta = express.Router();
+const express = require('express')
+const ruta = express.Router()
 const mysqlConnection = require('../database')
 const verificarToken = require('../auth')
-
 
 /**
  * @swagger
@@ -53,7 +52,7 @@ const verificarToken = require('../auth')
  *      name: idUsuario
  *      required: true
  *      schema:
- *        type: integer 
+ *        type: integer
  *      description: id del Usuario
  */
 
@@ -68,7 +67,7 @@ const verificarToken = require('../auth')
  * @swagger
  * /Usuario:
  *  get:
- *    summary: retorna una lista de Usuario
+ *    summary: Permite obtener la lista de usuarios
  *    tags: [Usuario]
  *    responses:
  *      200:
@@ -81,20 +80,20 @@ const verificarToken = require('../auth')
  *                $ref: '#/components/schemas/Usuario'
  */
 ruta.get('/Usuario', verificarToken, (req, res) => {
-    mysqlConnection.query('CALL R_Usuario()', (err, rows, fields) =>{
-        if(!err){
-            res.json(rows[0])
-        }else{
-            res.status(500)
-        }
-    })
+  mysqlConnection.query('CALL R_Usuario()', (err, rows, fields) => {
+    if (!err) {
+      res.json(rows[0])
+    } else {
+      res.status(500)
+    }
+  })
 })
 
 /**
  * @swagger
  * /Usuario/{idUsuario}:
  *  get:
- *    summary: Obtiene un usuario por su ID
+ *    summary: Permite obtener un usuario especifico
  *    tags: [Usuario]
  *    parameters:
  *      - $ref: '#/components/parameters/idUsuario'
@@ -111,32 +110,32 @@ ruta.get('/Usuario', verificarToken, (req, res) => {
  *        description: Usuario no encontrado
  */
 ruta.get('/Usuario/:idUsuario', verificarToken, (req, res) => {
-    const {idUsuario} = req.params
-    mysqlConnection.query('CALL R_UsuarioByID(?)', [idUsuario], (err, rows, fields) =>{
-        if(!err){
-            res.status(200).json(rows[0][0])
-        }else{
-            res.status(500).json(err)
-        }
-    })
+  const { idUsuario } = req.params
+  mysqlConnection.query('CALL R_UsuarioByID(?)', [idUsuario], (err, rows, fields) => {
+    if (!err) {
+      res.status(200).json(rows[0][0])
+    } else {
+      res.status(500).json(err)
+    }
+  })
 })
 
 ruta.get('/Usuario/Content/:Keyword', verificarToken, (req, res) => {
-    const {Keyword} = req.params
-    mysqlConnection.query('CALL S_Usuario(?)', [Keyword], (err, rows, fields) =>{
-        if(!err){
-            res.status(200).json(rows[0])
-        }else{
-            res.status(500)
-        }
-    })
+  const { Keyword } = req.params
+  mysqlConnection.query('CALL S_Usuario(?)', [Keyword], (err, rows, fields) => {
+    if (!err) {
+      res.status(200).json(rows[0])
+    } else {
+      res.status(500)
+    }
+  })
 })
 
 /**
  * @swagger
  * /Usuario:
  *  post:
- *    summary: Crear un nuevo Usuario
+ *    summary: Permite registrar un nuevo Usuario
  *    tags: [Usuario]
  *    requestBody:
  *      required: true
@@ -151,22 +150,22 @@ ruta.get('/Usuario/Content/:Keyword', verificarToken, (req, res) => {
  *        description: Error con el servidor
  *
  */
-ruta.post('/Usuario', (req, res) =>{
-    const {idUsuario, FotoPerfil, Nombre, ApellidoPaterno, ApellidoMaterno, FechaNacimiento, Email, NombreUsuario, Password, idTipoUsuario} = req.body
-    mysqlConnection.query('CALL CU_Usuario(?, ?, ?, ?, ?, ?, ?, ?, ?)', [idUsuario, Nombre, ApellidoPaterno, ApellidoMaterno, FechaNacimiento, Email, NombreUsuario, Password, idTipoUsuario], (err, rows, fields) =>{
-        if(!err){
-            res.status(201).json(rows[0][0])
-        }else{
-            console.log(err)
-        }
-    })
+ruta.post('/Usuario', (req, res) => {
+  const { idUsuario, FotoPerfil, Nombre, ApellidoPaterno, ApellidoMaterno, FechaNacimiento, Email, NombreUsuario, Password, idTipoUsuario } = req.body
+  mysqlConnection.query('CALL CU_Usuario(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', [idUsuario, FotoPerfil, Nombre, ApellidoPaterno, ApellidoMaterno, FechaNacimiento, Email, NombreUsuario, Password, idTipoUsuario], (err, rows, fields) => {
+    if (!err) {
+      res.status(201).json(rows[0][0])
+    } else {
+      console.log(err)
+    }
+  })
 })
 
 /**
  * @swagger
  * /Usuario/{idUsuario}:
  *  put:
- *    summary: Actualiza un Usuario por id
+ *    summary: Permite actualizar un Usuario determinado
  *    tags: [Usuario]
  *    parameters:
  *      - $ref: '#/components/parameters/idUsuario'
@@ -182,23 +181,23 @@ ruta.post('/Usuario', (req, res) =>{
  *      404:
  *        description: Usuario no encontrado
  */
-ruta.put('/Usuario/:idUsuario', verificarToken, (req, res) =>{
-    const {idUsuario} = req.params
-    const {Nombre, ApellidoPaterno, ApellidoMaterno, FechaNacimiento, Email, NombreUsuario} = req.body
-    mysqlConnection.query('CALL CU_Usuario(?, ?, ?, ?, ?, ?, ?, ?, ?)', [idUsuario, Nombre, ApellidoPaterno, ApellidoMaterno, FechaNacimiento, Email, NombreUsuario, Password, idTipoUsuario], (err, rows, fields) =>{
-        if(!err){
-            res.status(200).json(rows[0][0])
-        }else{
-            res.status(500)
-        }
-    })
+ruta.put('/Usuario/:idUsuario', verificarToken, (req, res) => {
+  const { idUsuario } = req.params
+  const { Nombre, FotoPerfil, ApellidoPaterno, ApellidoMaterno, FechaNacimiento, Email, NombreUsuario } = req.body
+  mysqlConnection.query('CALL CU_Usuario(?, ?, ?, ?, ?, ?, ?, ?, ?)', [idUsuario, FotoPerfil, Nombre, ApellidoPaterno, ApellidoMaterno, FechaNacimiento, Email, NombreUsuario, null, null], (err, rows, fields) => {
+    if (!err) {
+      res.status(200).json(rows[0][0])
+    } else {
+      res.status(500)
+    }
+  })
 })
 
 /**
  * @swagger
  * /Usuario/{idUsuario}:
  *  delete:
- *    summary: Eliminar un Usuario de la BD por id 
+ *    summary: Permite eliminar un Usuario y todo el contenido relacionado a este
  *    tags: [Usuario]
  *    parameters:
  *      - $ref: '#/components/parameters/idUsuario'
@@ -208,14 +207,14 @@ ruta.put('/Usuario/:idUsuario', verificarToken, (req, res) =>{
  *      404:
  *        description: Usuario no encontrado
  */
-ruta.delete('/Usuario/:idUsuario', verificarToken, (req, res) =>{
-    const {idUsuario} = req.params;
-    mysqlConnection.query('CALL D_Usuario(?)', [idUsuario], (err, rows, fields) =>{
-        if(!err){
-            res.status(200).json(rows[0][0])
-        }else{
-            res.status(500)
-        }
-    })
+ruta.delete('/Usuario/:idUsuario', verificarToken, (req, res) => {
+  const { idUsuario } = req.params
+  mysqlConnection.query('CALL D_Usuario(?)', [idUsuario], (err, rows, fields) => {
+    if (!err) {
+      res.status(200).json(rows[0][0])
+    } else {
+      res.status(500)
+    }
+  })
 })
 module.exports = ruta

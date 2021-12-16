@@ -1,5 +1,5 @@
-const express = require('express');
-const ruta = express.Router();
+const express = require('express')
+const ruta = express.Router()
 const mysqlConnection = require('../database')
 
 /**
@@ -23,7 +23,7 @@ const mysqlConnection = require('../database')
  *      name: idTipoUsuario
  *      required: true
  *      schema:
- *        type: integer 
+ *        type: integer
  *      description: id del TipoUsuario
  */
 
@@ -38,7 +38,7 @@ const mysqlConnection = require('../database')
  * @swagger
  * /TipoUsuario:
  *  get:
- *    summary: retorna una lista de TipoUsuario
+ *    summary: Permite consultar la lista de Tipos de usuario que existen en el sistema
  *    tags: [TipoUsuario]
  *    responses:
  *      200:
@@ -51,20 +51,20 @@ const mysqlConnection = require('../database')
  *                $ref: '#/components/schemas/TipoUsuario'
  */
 ruta.get('/TipoUsuario', (req, res) => {
-    mysqlConnection.query('CALL R_TipoUsuario()', (err, rows, fields) =>{
-        if(!err){
-            res.json(rows[0])
-        }else{
-            console.log(err)
-        }
-    })
+  mysqlConnection.query('CALL R_TipoUsuario()', (err, rows, fields) => {
+    if (!err) {
+      res.json(rows[0])
+    } else {
+      console.log(err)
+    }
+  })
 })
 
 /**
  * @swagger
  * /TipoUsuario:
  *  post:
- *    summary: Crear un nuevo TipoUsuario
+ *    summary: Permite crear un nuevo Tipo de usuario
  *    tags: [TipoUsuario]
  *    requestBody:
  *      required: true
@@ -80,22 +80,22 @@ ruta.get('/TipoUsuario', (req, res) => {
  *
  */
 
-ruta.post('/TipoUsuario', (req, res) =>{
-    const {TipoUsuario} = req.body;
-    mysqlConnection.query('CALL CU_TipoUsuario(?, ?)', [0, TipoUsuario], (err, rows, fields) =>{
-        if(!err){
-            res.json({Status: 'TipoUsuario guardado'})
-        }else{
-            console.log(err)
-        }
-    })
+ruta.post('/TipoUsuario', (req, res) => {
+  const { TipoUsuario } = req.body
+  mysqlConnection.query('CALL CU_TipoUsuario(?, ?)', [0, TipoUsuario], (err, rows, fields) => {
+    if (!err) {
+      res.json({ Status: 'TipoUsuario guardado' })
+    } else {
+      console.log(err)
+    }
+  })
 })
 
 /**
  * @swagger
  * /TipoUsuario/{idTipoUsuario}:
  *  put:
- *    summary: Actualiza un TipoUsuario por id
+ *    summary: Permite consultar un Tipo de Usuario
  *    tags: [TipoUsuario]
  *    parameters:
  *      - $ref: '#/components/parameters/idTipoUsuario'
@@ -111,23 +111,23 @@ ruta.post('/TipoUsuario', (req, res) =>{
  *      404:
  *        description: TipoUsuario no encontrado
  */
-ruta.put('/TipoUsuario/:idTipoUsuario', (req, res) =>{
-    const {TipoUsuario} = req.body;
-    const {idTipoUsuario} = req.params;
-    mysqlConnection.query('CALL CU_TipoUsuario(?, ?)', [idTipoUsuario, TipoUsuario], (err, rows, fields) =>{
-        if(!err){
-            res.json({Status: 'TipoUsuario actualizado'})
-        }else{
-            console.log(err)
-        }
-    })
+ruta.put('/TipoUsuario/:idTipoUsuario', (req, res) => {
+  const { TipoUsuario } = req.body
+  const { idTipoUsuario } = req.params
+  mysqlConnection.query('CALL CU_TipoUsuario(?, ?)', [idTipoUsuario, TipoUsuario], (err, rows, fields) => {
+    if (!err) {
+      res.json({ Status: 'TipoUsuario actualizado' })
+    } else {
+      console.log(err)
+    }
+  })
 })
 
 /**
  * @swagger
  * /TipoUsuario/{idTipoUsuario}:
  *  delete:
- *    summary: Eliminar un TipoUsuario de la BD por id 
+ *    summary: Permite eliminar un Tipo de usuario
  *    tags: [TipoUsuario]
  *    parameters:
  *      - $ref: '#/components/parameters/idTipoUsuario'
@@ -137,15 +137,15 @@ ruta.put('/TipoUsuario/:idTipoUsuario', (req, res) =>{
  *      404:
  *        description: TipoUsuario no encontrado
  */
-ruta.delete('/TipoUsuario/:idTipoUsuario', (req, res) =>{
-    const {idTipoUsuario} = req.params;
-    mysqlConnection.query('CALL D_TipoUsuario(?)', [idTipoUsuario], (err, rows, fields) =>{
-        if(!err){
-            res.json({Status: 'TipoUsuario eliminados'})
-        }else{
-            console.log(err)
-        }
-    })
+ruta.delete('/TipoUsuario/:idTipoUsuario', (req, res) => {
+  const { idTipoUsuario } = req.params
+  mysqlConnection.query('CALL D_TipoUsuario(?)', [idTipoUsuario], (err, rows, fields) => {
+    if (!err) {
+      res.json({ Status: 'TipoUsuario eliminados' })
+    } else {
+      console.log(err)
+    }
+  })
 })
 
 module.exports = ruta

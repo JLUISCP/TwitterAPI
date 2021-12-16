@@ -32,7 +32,7 @@ const jwt = require('jsonwebtoken')
  * @swagger
  * /Login:
  *  post:
- *    summary: Retorna un usuario y un token si las credenciales son validas
+ *    summary: Permite logearse y obtener un token si las credenciales son validas
  *    tags: [Login]
  *    requestBody:
  *      required: true
@@ -44,21 +44,21 @@ const jwt = require('jsonwebtoken')
  *      200:
  *        description: Logeado
  */
-ruta.post('/Login',(req, res) =>{
-    const {NombreUsuario, Contraseña} = req.body
-    mysqlConnection.query('CALL R_Login(?, ?)', [NombreUsuario, Contraseña], (err, rows, fields) =>{
-        if(!err){
-            if(!rows[0][0].hasOwnProperty('idUsuario')){
-                res.status(200).json(rows[0][0])
-            }else{
-                rows[0][0].Token = jwt.sign({User: NombreUsuario, Pss: Contraseña}, config.secret, {
-                    expiresIn: 60 * 60 * 24
-                })
-                res.status(201).json(rows[0][0])
-            }
-        }else{
-            res.status(500).json('Error de conexion con el servidor')
-        }
-    })
+ruta.post('/Login', (req, res) => {
+  const { NombreUsuario, Contraseña } = req.body
+  mysqlConnection.query('CALL R_Login(?, ?)', [NombreUsuario, Contraseña], (err, rows, fields) => {
+    if (!err) {
+      if (!rows[0][0].hasOwnProperty('idUsuario')) {
+        res.status(200).json(rows[0][0])
+      } else {
+        rows[0][0].Token = jwt.sign({ User: NombreUsuario, Pss: Contraseña }, config.secret, {
+          expiresIn: 60 * 60 * 24
+        })
+        res.status(201).json(rows[0][0])
+      }
+    } else {
+      res.status(500).json('Error de conexion con el servidor')
+    }
+  })
 })
 module.exports = ruta
