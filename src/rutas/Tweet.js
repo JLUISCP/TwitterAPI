@@ -266,7 +266,7 @@ ruta.post('/Tweet', verificarToken, (req, res) => {
 ruta.put('/Tweet/:idTweet', verificarToken, (req, res) => {
   const { idTweet } = req.params
   const { Cuerpo, FechaHoraPublicacion, idUsuario } = req.body
-  mysqlConnection.query('CALL CU_Tweet(?, ?, ?, ?)', [idTweet, Cuerpo, FechaHoraPublicacion, idUsuario], (err, rows, fields) => {
+  mysqlConnection.query('CALL CU_Tweet(?, ?, ?, ?, ?)', [idTweet, Cuerpo, FechaHoraPublicacion, null, idUsuario], (err, rows, fields) => {
     if (!err) {
       res.status(200).json(rows[0][0])
     } else {
