@@ -226,12 +226,13 @@ ruta.get('/Tweet/Content/:Keyword', verificarToken, (req, res) => {
  *
  */
 ruta.post('/Tweet', verificarToken, (req, res) => {
-  const { Cuerpo, FechaHoraPublicacion, idUsuario } = req.body
-  mysqlConnection.query('CALL CU_Tweet(?, ?, ?, ?)', [0, Cuerpo, FechaHoraPublicacion, idUsuario], (err, rows, fields) => {
+  const { Cuerpo, FechaHoraPublicacion, Multimedia, idUsuario } = req.body
+  mysqlConnection.query('CALL CU_Tweet(?, ?, ?, ?, ?)', [0, Cuerpo, FechaHoraPublicacion, Multimedia, idUsuario], (err, rows, fields) => {
     if (!err) {
       res.status(201).json(rows[0][0])
     } else {
       res.status(500)
+      console.log(err)
     }
   })
 })

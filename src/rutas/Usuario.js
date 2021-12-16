@@ -184,7 +184,7 @@ ruta.post('/Usuario', (req, res) => {
 ruta.put('/Usuario/:idUsuario', verificarToken, (req, res) => {
   const { idUsuario } = req.params
   const { Nombre, FotoPerfil, ApellidoPaterno, ApellidoMaterno, FechaNacimiento, Email, NombreUsuario } = req.body
-  mysqlConnection.query('CALL CU_Usuario(?, ?, ?, ?, ?, ?, ?, ?, ?)', [idUsuario, FotoPerfil, Nombre, ApellidoPaterno, ApellidoMaterno, FechaNacimiento, Email, NombreUsuario, null, null], (err, rows, fields) => {
+  mysqlConnection.query('CALL CU_Usuario(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', [idUsuario, FotoPerfil, Nombre, ApellidoPaterno, ApellidoMaterno, FechaNacimiento, Email, NombreUsuario, null, null], (err, rows, fields) => {
     if (!err) {
       res.status(200).json(rows[0][0])
     } else {
