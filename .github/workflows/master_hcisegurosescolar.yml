@@ -52,5 +52,5 @@ jobs:
         with:
           app-name: 'hcisegurosescolar'
           slot-name: 'Production'
-          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_72FCC100C8264AD38DA2E2A772B95E1B }}
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_ADDCC100546B47E7B562598D4BB15166 }}
           package: .
